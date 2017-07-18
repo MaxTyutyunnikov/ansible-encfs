@@ -1,38 +1,37 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+A simple role to manage [EncFS](https://github.com/vgough/encfs) using Ansible.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+* Ansible 2.2+
+* A secret that you want to use as a key.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+*encfs* - absolute location of the directory you want exposed as an ecrypted mount point
+*encfs_user* - user to run EncFS process as
+*encfs_group* - group of user to run EncFS process as
+*passphrase_fetch_cmd* - command that, when executed, provides a passphrase as a string
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+For example:
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: rorygibson.encfs, encfs: /var/sensistive-data, passphrase_fetch_cmd: "echo 'MY SECRET'" }
 
 License
 -------
 
-BSD
+Public domain.
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Rory Gibson - @rorygibson

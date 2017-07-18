@@ -1,2 +1,63 @@
 ---
-# tasks file for ansible-encfs
+    
+- name: install encfs
+  apt:
+    name: encfs
+    state: present
+
+- name: create encrypted area for ES storage
+  file:
+    path: "{{ encfs }}"
+    state: directory
+    mode: 0744
+    owner: "{{ encfs_user }}"
+    group: "{{ encfs_group }}"
+    
+- name: create decrypted area for ES read
+  file:
+    path: "{{ encfs}}{{encfs_suffix}}"
+    state: directory
+    mode: 0744
+    owner: "{{ encfs_user }}"
+    group: "{{ encfs_group }}"
+    
+- name: check if data dir is already mounted
+  command: mountpoint -q {{ encfs }}
+  failed_when: False
+  changed_when: False
+  register: volume_stat
+
+- name: Create encfs encrypted directory with password
+  shell: printf "p\n`{{ metadata_cmd }}`\n" | encfs {{ encfs }}{{ encfs_suffix }} {{ encfs }} --stdinpass
+  args:
+    creates: '{{ encfs_config_file }}'
+  register: encfs_created
+  when: volume_stat.rc != 0
+
+# running encfs leaves the daemon running in the background, but not as a service.
+# so unmount and do it properly.
+- name: unmount
+  shell: umount {{ encfs }}
+  when: volume_stat.rc == 0 and encfs_created.changed
+
+- name: template EncFS wrapper script
+  template:
+    src: encfs-wrapper.sh.j2
+    dest: /usr/bin/encfs-wrapper.sh
+    mode: 0744
+    owner: root
+    group: root
+    
+- name: template service file
+  template:
+    src: encfs.service.j2
+    dest: /etc/systemd/system/encfs.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: start encfs.service
+  systemd:
+    state: started
+    enabled: yes
+    name: encfs.service

@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount Encfs
+
+[Service]
+ExecStart=/usr/bin/encfs-wrapper.sh
+ExecStop=/bin/umount {{ encfs }}
+Type=forking
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

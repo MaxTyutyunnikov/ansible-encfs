@@ -1,0 +1,3 @@
+#! /bin/bash
+
+printf `{{ passphrase_fetch_cmd }}` | encfs {{ encfs }}{{ encfs_suffix }} {{ encfs }} --stdinpass --public

@@ -1,2 +1,20 @@
 ---
-# defaults file for ansible-encfs
+
+# location of decrypted mountpoint
+encfs: /app/data
+
+# user / group to run EncFS as (it runs with --public though, so this
+# is about the process, not the files themselves)
+encfs_user: root
+encfs_group: root
+
+# directory suffix for encrypted data
+encfs_suffix: _encrypted
+
+# location of EncFS config file in volume
+encfs_config_file: "{{encfs}}{{ encfs_suffix }}/.encfs6.xml"
+
+# ScaleWay example: metadata server lets you get the passphrase as an "environment variable"
+metadata_server: 169.254.42.42
+metadata_url: http://{{ metadata_server }}/user_data/encfs_pw
+passphrase_fetch_cmd: curl --local-port 1-1024 --silent {{ metadata_url }}
