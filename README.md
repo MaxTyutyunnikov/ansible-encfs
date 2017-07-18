@@ -13,8 +13,11 @@ Role Variables
 --------------
 
 *encfs* - absolute location of the directory you want exposed as an ecrypted mount point
+
 *encfs_user* - user to run EncFS process as
+
 *encfs_group* - group of user to run EncFS process as
+
 *passphrase_fetch_cmd* - command that, when executed, provides a passphrase as a string
 
 Example Playbook
