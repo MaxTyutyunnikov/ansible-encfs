@@ -23,11 +23,17 @@ Role Variables
 Example Playbook
 ----------------
 
-For example:
+The following will ensure that */var/sensitive-data* provides a plain-text view of encrypted data contained in */var/sensitive-data_encrypted*. The passphrase will be 'MY SECRET'.
 
     - hosts: servers
       roles:
-         - { role: rorygibson.encfs, encfs: /var/sensistive-data, passphrase_fetch_cmd: "echo 'MY SECRET'" }
+         - { role: rorygibson.encfs, encfs: /var/sensitive-data, passphrase_fetch_cmd: "echo 'MY SECRET'" }
+
+And this will use a passphrase retrieved from the metadata service of the hosting environment.
+
+    - hosts: servers
+      roles:
+         - { role: rorygibson.encfs, encfs: /var/sensitive-data, passphrase_fetch_cmd: "curl --silent http://metadata-server/my-passphrase-key" }
 
 License
 -------
