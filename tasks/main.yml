@@ -1,5 +1,5 @@
 ---
-    
+
 - name: install encfs
   apt:
     name: encfs
@@ -12,7 +12,7 @@
     mode: 0744
     owner: "{{ encfs_user }}"
     group: "{{ encfs_group }}"
-    
+
 - name: create decrypted area for ES read
   file:
     path: "{{ encfs}}{{encfs_suffix}}"
@@ -20,7 +20,7 @@
     mode: 0744
     owner: "{{ encfs_user }}"
     group: "{{ encfs_group }}"
-    
+
 - name: check if data dir is already mounted
   command: mountpoint -q {{ encfs }}
   failed_when: False
@@ -47,7 +47,7 @@
     mode: 0744
     owner: root
     group: root
-    
+
 - name: template service file
   template:
     src: encfs.service.j2
